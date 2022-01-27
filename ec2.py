@@ -1,6 +1,6 @@
 import boto3
 
-DRYRUN = True
+DRYRUN = False
 
 ec2_client = boto3.client('ec2')
 images = ec2_client.describe_images(
@@ -34,7 +34,12 @@ if AMI.state == 'available':
         DryRun=DRYRUN
     )
     ec2_instance = boto3.resource('ec2')
-    ec2 = ec2_instance.Instance(instance['instances'][0]['InstanceId'])
+    ec2 = ec2_instance.Instance(instance['Instances'][0]['InstanceId'])
     print(ec2.instance_id)
+    ec2.wait_until_running()
+    print(f"Instance is {ec2.state['Name']} is spinning up")
+    ec2.terminate()
+    ec2.wait_until_running()
+    print(f"Instance is {ec2.state['Name']} is terminating")
 else:
     print("AMI not available")
