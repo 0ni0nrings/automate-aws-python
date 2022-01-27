@@ -51,5 +51,5 @@ if __name__ == '__main__':
     ec2.wait_until_running()
     print(f"Instance is {ec2.state['Name']}")
     ec2.terminate()
-    ec2.wait_until_running()
+    ec2.wait_until_terminated()
     print(f"Instance is {ec2.state['Name']}")
