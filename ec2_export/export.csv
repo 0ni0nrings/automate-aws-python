@@ -1,0 +1,6 @@
+InstanceId,InstanceType,State,PublicIpAddress
+i-09432671228fd35b3,t2.micro,pending,54.173.219.37
+i-0759e4ab78d1088e8,t2.micro,pending,3.95.148.144
+i-046af96ab1b90e893,t2.micro,pending,44.201.167.154
+i-06b8ba1f4baa23155,t2.micro,pending,54.165.18.240
+i-0784ca7db8748b0a6,t2.micro,pending,54.172.172.52
