@@ -20,8 +20,8 @@ def EnforceS3Encryption(name):
         ServerSideEncryptionConfiguration={
             'Rules': [
                 {
-                    'ApplyServerSideEncryptionByDeaut': {
-                        'SSEAlgorithm': 'AWS256'
+                    'ApplyServerSideEncryptionByDefault': {
+                        'SSEAlgorithm': 'AES256'
                     }
                 }
             ]
