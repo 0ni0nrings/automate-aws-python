@@ -21,7 +21,7 @@ def EnforceS3Encryption(name):
     try:
         s3_client.get_bucket_encryption(Bucket=bucket.name)
         print("Encryption already set")
-    except s3_client.exception.ClientError as error:
+    except s3_client.exceptions.ClientError as error:
         if 'ServerSideEncryptionConfigurationNotFoundError' in str(error):
             print(f"Encrypting {bucket.name}")
             response = s3_client.put_bucket_encryption(
@@ -38,6 +38,8 @@ def EnforceS3Encryption(name):
                 }
             )    
             print(response)
+        else:
+            raise error # catch all error
     
 if __name__ == '__main__':
     Name = 'bucketalreadyexistsinhisregion'
