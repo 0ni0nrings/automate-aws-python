@@ -18,24 +18,29 @@ def EnforceS3Encryption(name):
     s3 = boto3.resource('s3')
     s3_client = boto3.client('s3')
     bucket = s3.Bucket(name)
-    print(f"Encrypting {bucket.name}")
-    response = s3_client.put_bucket_encryption(
-        Bucket=bucket.name,
-        ServerSideEncryptionConfiguration={
-            'Rules': [
-                {
-                    'ApplyServerSideEncryptionByDefault': {
-                        'SSEAlgorithm': 'AES256'
-                    }
+    try:
+        s3_client.get_bucket_encryption(Bucket=bucket.name)
+        print("Encryption already set")
+    except s3_client.exception.ClientError as error:
+        if 'ServerSideEncryptionConfigurationNotFoundError' in str(error):
+            print(f"Encrypting {bucket.name}")
+            response = s3_client.put_bucket_encryption(
+                Bucket=bucket.name,
+                ServerSideEncryptionConfiguration={
+                    'Rules': [
+                        {
+                            'ApplyServerSideEncryptionByDefault': {
+                                'SSEAlgorithm': 'AES256'
+                            }
+                        }
+                    ]
+                    
                 }
-            ]
-            
-        }
-    )    
-    print(response)
+            )    
+            print(response)
     
 if __name__ == '__main__':
-    Name = 'bucketalreadyexists'
+    Name = 'bucketalreadyexistsinhisregion'
     if CreateBucket(Name):
         EnforceS3Encryption(Name)
     # DeleteBucket(Name)
