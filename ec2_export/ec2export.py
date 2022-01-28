@@ -4,7 +4,16 @@ import csv
 def Get_Instances():
     ec2 = boto3.client('ec2')
     paginator = ec2.get_paginator('describe_instances')
-    page_iterator = paginator.paginate()
+    page_iterator = paginator.paginate(
+        Filters=[
+            {
+                'Name': 'instance-state-name',
+                'Values': [
+                    'running',
+                ]
+            },
+        ]
+    )
     response = []
     for page in page_iterator:
         for instance in page ['Reservations'][0]['Instances']:
@@ -29,7 +38,7 @@ if __name__ == '__main__':
                 "InstanceId": instance['InstanceId'],
                 "InstanceType": instance['InstanceType'],
                 "State": instance['State']['Name'],
-                "PublicIpAddress": instance['PublicIpAddress']
+                "PublicIpAddress": instance.get('PublicIpAddress', "N/A")
             }
         )
     CSV_Writer(content=data, header=header)
