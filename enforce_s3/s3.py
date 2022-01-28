@@ -2,8 +2,12 @@ import boto3
 
 def CreateBucket(name):
     s3_client = boto3.client('s3')
-    s3_client.create_bucket(Bucket=name)
-    return True
+    try:
+        s3_client.create_bucket(Bucket=name)
+        return True
+    except s3_client.exceptions.BucketAlreadyExists:
+        print(f"Bucket {name} already exists")
+        return False
     
 def DeleteBucket(name):
     s3_client = boto3.client('s3')
@@ -31,8 +35,8 @@ def EnforceS3Encryption(name):
     print(response)
     
 if __name__ == '__main__':
-    Name = 'testbucketforencryptiondelete'
-    CreateBucket(Name)
-    EnforceS3Encryption(Name)
+    Name = 'bucketalreadyexists'
+    if CreateBucket(Name):
+        EnforceS3Encryption(Name)
     # DeleteBucket(Name)
     
