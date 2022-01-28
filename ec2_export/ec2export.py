@@ -3,8 +3,13 @@ import csv
 
 def Get_Instances():
     ec2 = boto3.client('ec2')
-    response = ec2.describe_instances()
-    return response['Reservations'][0]['Instances']
+    paginator = ec2.get_paginator('describe_instances')
+    page_iterator = paginator.paginate()
+    response = []
+    for page in page_iterator:
+        for instance in page ['Reservations'][0]['Instances']:
+            response.append(instance)
+    return response
 
 def CSV_Writer(header, content):
     with open('export.csv', 'w') as csvFile:
